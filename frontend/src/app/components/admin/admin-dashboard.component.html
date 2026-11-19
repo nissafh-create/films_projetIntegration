@@ -44,7 +44,7 @@
 
       <div class="stat-card stat-accent">
         <span class="stat-label">Revenu Total Généré</span>
-        <div class="stat-value">{{ (stats()?.totalRevenue || 0) | currency:'EUR':'symbol':'1.2-2':'fr' }}</div>
+        <div class="stat-value">{{ (stats()?.totalRevenue || 0) | number:'1.2-2' }} €</div>
         <div class="stat-sub">{{ stats()?.activeRentalsCount }} locations actives</div>
       </div>
 
@@ -111,7 +111,7 @@
                 </span>
               </td>
               <td>{{ m.releaseYear }}</td>
-              <td class="price-cell">{{ m.rentalPricePerDay | currency:'EUR':'symbol':'1.2-2':'fr' }}</td>
+              <td class="price-cell">{{ m.rentalPricePerDay | number:'1.2-2' }} €</td>
               <td>
                 <span class="video-key-code">{{ m.videoKey || 'non définie' }}</span>
               </td>

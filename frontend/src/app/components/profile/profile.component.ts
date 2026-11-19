@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -15,6 +15,7 @@ import { Wallet, WalletTransaction } from '../../models/media.model';
 export class ProfileComponent implements OnInit {
   authService = inject(AuthService);
   walletService = inject(WalletService);
+  private cdr = inject(ChangeDetectorRef);
 
   wallet = this.walletService.walletSignal;
   transactions = signal<WalletTransaction[]>([]);
@@ -50,14 +51,18 @@ export class ProfileComponent implements OnInit {
 
   loadWallet(): void {
     this.walletService.getWallet().subscribe({
-      error: () => {}
+      next: () => this.cdr.markForCheck(),
+      error: () => this.cdr.markForCheck()
     });
   }
 
   loadTransactions(): void {
     this.walletService.getTransactions().subscribe({
-      next: (txs) => this.transactions.set(txs),
-      error: () => {}
+      next: (txs) => {
+        this.transactions.set(txs);
+        this.cdr.markForCheck();
+      },
+      error: () => this.cdr.markForCheck()
     });
   }
 
@@ -128,10 +133,12 @@ export class ProfileComponent implements OnInit {
         this.topupLoading.set(false);
         this.topupSuccess.set(`Portefeuille rechargé avec succès de ${this.topupAmount.toFixed(2)} € !`);
         this.loadTransactions();
+        this.cdr.markForCheck();
       },
       error: (err) => {
         this.topupLoading.set(false);
         this.topupError.set(err?.error?.message || 'Erreur lors de la recharge.');
+        this.cdr.markForCheck();
       }
     });
   }

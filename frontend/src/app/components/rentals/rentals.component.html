@@ -102,7 +102,7 @@
           <div class="rental-info">
             <h3 class="rental-title">{{ rental.mediaTitle }}</h3>
             <p class="rental-expires">Terminée le {{ rental.endDate | date:'short':'':'fr' }}</p>
-            <p class="rental-cost">Montant : {{ rental.totalPrice | currency:'EUR':'symbol':'1.2-2':'fr' }} ({{ rental.days }} jours)</p>
+            <p class="rental-cost">Montant : {{ rental.totalPrice | number:'1.2-2' }} € ({{ rental.days }} jours)</p>
 
             <a [routerLink]="['/media', rental.mediaId]" class="btn-re-rent">Relouer</a>
           </div>
